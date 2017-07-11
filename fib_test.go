@@ -3,7 +3,7 @@ package fib_test
 import (
 	"fmt"
 
-	"fib"
+	"github.com/soniakeys/fib"
 )
 
 func ExampleHeap_Min_empty() {
