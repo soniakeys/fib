@@ -1,3 +1,5 @@
+// Public domain
+
 // Fib implements a Fibonacci heap.
 //
 // Implementation follows Fredman and Tarjan's "Fibonacci Heaps and Their Uses
@@ -27,6 +29,11 @@ type Value interface {
 // argument of decrease key and delete must allow a reference to a value
 // within the heap.  A *Node represents such a reference to a value.
 // A *Node is thus returned by Insert and passed to DecreaseKey and Delete.
+//
+// The Node passed to DecreaseKey or Delete must be a Node created in and
+// still present in the receiver heap.  Otherwise the Heap will likely be
+// corrupted.  For tracking whether a Node is still in the Heap, remember
+// that DeleteMin also removes Nodes.
 type Node struct {
 	value      Value
 	parent     *Node // CLRS, Fredman and Tarjan use simply "p"
@@ -35,6 +42,9 @@ type Node struct {
 	rank       int   // CLRS, Wikipedia use "degree"
 	mark       bool
 }
+
+// Value is an accessor, or getter, for the Value stored in a Node.
+func (n Node) Value() Value { return n.value }
 
 // Heap represents a Fibonacci heap.
 //
@@ -78,6 +88,9 @@ func meld1(list, single *Node) {
 // Meld merges two Heaps.
 //
 // Meld merges all nodes of h2 into h.  Heap h2 is left empty.
+//
+// The two heaps must be different heaps.  Melding a heap to itself
+// will corrupt the heap.
 func (h *Heap) Meld(h2 *Heap) {
 	switch {
 	case h.Node == nil:
@@ -114,6 +127,9 @@ func (h Heap) Min() (min Value, ok bool) {
 // It returns the deleted minimum and ok = true as long as the heap is not
 // empty.  Otherwise the heap is left empty and the method returns a nil
 // Value interface and ok = false.
+//
+// For a non-empty Heap, the minimum value is stored in the Node at h.Node
+// and it is that exact Node that will be removed from the Heap.
 func (h *Heap) DeleteMin() (min Value, ok bool) {
 	if h.Node == nil {
 		return

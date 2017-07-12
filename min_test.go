@@ -1,3 +1,5 @@
+// Public domain
+
 package fib_test
 
 import (

@@ -1,3 +1,26 @@
 = Fib
 
-WIP.  Shaping up though.
+Package Fib implements a Fibonacci heap.
+
+It mostly follows Fredman and Tarjan's
+"Fibonacci Heaps and Their Uses in Improved Network Optimization Algorithms",
+Journal of the Association for Computing Machinery, Vol. 34, No. 3, July 1987.
+
+It is public domain and has 100% test coverage.
+
+== Some implementation notes
+
+A significant enhancement is that while Fredman and Tarjan describe storing
+"items, each with a real-valued key," this implementation stores any orderable
+type implementing a less-than method.  It does not depend on floating point
+comparisons.
+
+This implementation does not maintain a count of the number of values present
+in the heap.  F&T describe one use for the count, for sizing a certain array
+by log(count), but this implementation uses a Go map for reasons of simplicity
+and robustness and does not need the count.
+
+Popular Fibonacci heap implementations follow Cormen, Leiserson, Rivest, and
+Stein (CLRS) in "Introduction to Algorithms."  This package follows the
+1987 paper by Fredman and Tarjan.  A significant difference is in their
+algorithms for the delete function.  Fredman and Tarjan's is "lazier."
