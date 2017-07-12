@@ -48,6 +48,9 @@ type Heap struct{ *Node }
 
 // Insert creates a new Node for Value v, adds it to receiver Heap h, and
 // returns the newly created Node.
+//
+// Keep the return value if you might need to pass it to DecreaseKey or
+// Delete.
 func (h *Heap) Insert(v Value) *Node {
 	x := &Node{value: v}
 	if h.Node == nil {
@@ -73,6 +76,8 @@ func meld1(list, single *Node) {
 }
 
 // Meld merges two Heaps.
+//
+// Meld merges all nodes of h2 into h.  Heap h2 is left empty.
 func (h *Heap) Meld(h2 *Heap) {
 	switch {
 	case h.Node == nil:
@@ -83,6 +88,7 @@ func (h *Heap) Meld(h2 *Heap) {
 			*h = *h2
 		}
 	}
+	h2.Node = nil
 }
 
 // meld two non-empty node lists
@@ -194,7 +200,9 @@ func (h *Heap) DeleteMin() (min Value, ok bool) {
 	return min, true // return old min
 }
 
-// DecreaseKey stores a new Value in Node n, which must be less than or
+// DecreaseKey stores a new Value in Node n.
+//
+// Node n must be a node in Heap h.  The new value v must be less than or
 // equal to the existing value.
 //
 // If the existing value is LT the new value, the method returns an error.
