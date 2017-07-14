@@ -24,3 +24,54 @@ Popular Fibonacci heap implementations follow Cormen, Leiserson, Rivest, and
 Stein (CLRS) in "Introduction to Algorithms."  This package follows the
 1987 paper by Fredman and Tarjan.  A significant difference is in their
 algorithms for the delete function.  Fredman and Tarjan's is "lazier."
+
+== Compared to the standard libarary container/heap
+
+Use the standard library!
+
+The standard library heap is a few times better in both speed and space.
+That's typical between Fibonacci heaps and array-based binary heaps.
+If you read that Fibonacci heaps have better asymptotic performance and you
+think you have a big data set and so you _n e e d_ a Fibonacci heap, you are
+probably wrong.  In practice Fibonacci heaps rarely outperform simpler heaps.
+I was actually really pleased that this implementation came out only a few
+times slower than the standard library.
+
+If you don't care and you want one anyway, this package may serve you well.
+After all, a few times really fast is still really fast.  Still, there are
+some differences in functionality and in the API.
+
+For container/heap you must implement the five methods of heap.Interface.
+For this fib package, you also implement an interface, but there's just a
+single method to implement.
+
+.Table Functions and methods
+|===
+|operation|container/heap|fib
+
+|Heap construction
+|h := some indexable container that satisfies heap.Interface.
+|h := &Heap{} or h := new(fib.Heap)
+
+|"Heapify" populated container|heap.Init(h)| N/A
+
+|Put a new value on the heap|heap.Push(x)|h.Insert(x)
+
+|Test if heap is empty|h.Len() == 0|h.Node == nil
+
+|Number of values on heap|h.Len()| N/A
+
+|"Top" of heap, minimum value, next in priorty
+|h[0] (if you used a slice)
+|h.Min() or h.Node.Value()
+
+|Take min value from heap|heap.Pop(h)|h.DeleteMin()
+
+|Decrease heaped value|heap.Fix(h, i)|h.DecreaseKey(n)
+
+|Change heaped value|heap.Fix(h, i)| N/A
+
+|Remove a value from heap|heap.Remove(h, i)|h.Remove(n)
+
+|Merge two heaps| N/A | h.Meld(h2)
+|===
